@@ -330,8 +330,8 @@ namespace PerformanceCalculatorGUI.Screens
 				{
 					userPanel.Data.Value = new UserCardData
 					{
-						LivePP = totalLivePP,
-						LocalPP = totalLocalPP,
+						LivePP = totalLivePP + playcountPP,
+						LocalPP = totalLocalPP + playcountPP,
 						PlaycountPP = playcountPP
 					};
 				});
