@@ -274,7 +274,7 @@ namespace PerformanceCalculatorGUI.Screens
 						var perfAttributes = await performanceCalculator?.CalculateAsync(parsedScore.ScoreInfo, difficultyAttributes, token)!;
 						score.PP = perfAttributes?.Total ?? 0.0;
 
-						var extendedScore = new ExtendedScore(score, livePp, perfAttributes);
+						var extendedScore = new ExtendedScore(score, livePp, perfAttributes, player);
 						plays.Add(extendedScore);
 					}
 					
@@ -290,15 +290,12 @@ namespace PerformanceCalculatorGUI.Screens
 				foreach (int beatmapID in beatmapIDs)
 				{
 					List<ExtendedScore> playsOnBeatmap = plays.Where(x => x.SoloScore.BeatmapID == beatmapID).OrderByDescending(x => x.SoloScore.PP).ToList();
-					filteredPlays.Add(playsOnBeatmap.First());
+					ExtendedScore bestPlayOnBeatmap = playsOnBeatmap.First();
+					
+					filteredPlays.Add(bestPlayOnBeatmap);
+					Schedule(() => scores.Add(new ExtendedProfileScore(bestPlayOnBeatmap)));
 				}
-
 				plays = filteredPlays;
-				
-				foreach (ExtendedScore play in plays)
-				{
-					Schedule(() => scores.Add(new ExtendedProfileScore(play)));
-				}
 				
 				if (token.IsCancellationRequested)
 					return;
