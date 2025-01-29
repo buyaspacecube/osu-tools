@@ -28,30 +28,12 @@ using ButtonState = PerformanceCalculatorGUI.Components.ButtonState;
 
 namespace PerformanceCalculatorGUI.Screens
 {
-    public partial class CombinedProfileScreen : PerformanceCalculatorScreen
+    public partial class CombinedProfileScreen : ProfileScreen
     {
-        [Cached]
+		[Cached]
         private OverlayColourProvider colourProvider = new OverlayColourProvider(OverlayColourScheme.Plum);
-
-        private StatefulButton calculationButton;
-        private VerboseLoadingLayer loadingLayer;
-
-        private GridContainer layout;
-
-        private FillFlowContainer<ExtendedProfileScore> scores;
-
-        private LabelledTextBox usernameTextBox;
-        private Container userPanelContainer;
-        private UserCard userPanel;
-
-        private string currentUser;
-
-        private CancellationTokenSource calculationCancellatonToken;
-
-        private OverlaySortTabControl<ProfileSortCriteria> sortingTabControl;
-        private readonly Bindable<ProfileSortCriteria> sorting = new Bindable<ProfileSortCriteria>(ProfileSortCriteria.Local);
-
-        [Resolved]
+		
+		[Resolved]
         private NotificationDisplay notificationDisplay { get; set; }
 
         [Resolved]
@@ -65,11 +47,7 @@ namespace PerformanceCalculatorGUI.Screens
 
         [Resolved]
         private RulesetStore rulesets { get; set; }
-
-        public override bool ShouldShowConfirmationDialogOnSwitch => false;
-
-        private const float username_container_height = 40;
-
+		
         public CombinedProfileScreen()
         {
             RelativeSizeAxes = Axes.Both;
@@ -344,56 +322,6 @@ namespace PerformanceCalculatorGUI.Screens
                     calculationButton.State.Value = ButtonState.Done;
                 });
             }, TaskContinuationOptions.None);
-        }
-
-        protected override void Dispose(bool isDisposing)
-        {
-            base.Dispose(isDisposing);
-
-            calculationCancellatonToken?.Cancel();
-            calculationCancellatonToken?.Dispose();
-            calculationCancellatonToken = null;
-        }
-
-        protected override bool OnKeyDown(KeyDownEvent e)
-        {
-            if (e.Key == Key.Escape && !calculationCancellatonToken.IsCancellationRequested)
-            {
-                calculationCancellatonToken?.Cancel();
-            }
-
-            return base.OnKeyDown(e);
-        }
-
-        private void updateSorting(ProfileSortCriteria sortCriteria)
-        {
-            if (!scores.Children.Any())
-                return;
-
-            ExtendedProfileScore[] sortedScores;
-
-            switch (sortCriteria)
-            {
-                case ProfileSortCriteria.Live:
-                    sortedScores = scores.Children.OrderByDescending(x => x.Score.LivePP).ToArray();
-                    break;
-
-                case ProfileSortCriteria.Local:
-                    sortedScores = scores.Children.OrderByDescending(x => x.Score.PerformanceAttributes.Total).ToArray();
-                    break;
-
-                case ProfileSortCriteria.Difference:
-                    sortedScores = scores.Children.OrderByDescending(x => x.Score.PerformanceAttributes.Total - x.Score.LivePP).ToArray();
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(sortCriteria), sortCriteria, null);
-            }
-
-            for (int i = 0; i < sortedScores.Length; i++)
-            {
-                scores.SetLayoutPosition(sortedScores[i], i);
-            }
         }
     }
 }

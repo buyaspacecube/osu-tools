@@ -33,23 +33,23 @@ namespace PerformanceCalculatorGUI.Screens
         [Cached]
         private OverlayColourProvider colourProvider = new OverlayColourProvider(OverlayColourScheme.Plum);
 
-        private StatefulButton calculationButton;
-        private VerboseLoadingLayer loadingLayer;
+        protected StatefulButton calculationButton;
+        protected VerboseLoadingLayer loadingLayer;
 
-        private GridContainer layout;
+        protected GridContainer layout;
 
-        private FillFlowContainer<ExtendedProfileScore> scores;
+        protected FillFlowContainer<ExtendedProfileScore> scores;
 
-        private LabelledTextBox usernameTextBox;
-        private Container userPanelContainer;
-        private UserCard userPanel;
+        protected LabelledTextBox usernameTextBox;
+        protected Container userPanelContainer;
+        protected UserCard userPanel;
 
-        private string currentUser;
+        protected string currentUser;
 
-        private CancellationTokenSource calculationCancellatonToken;
+        protected CancellationTokenSource calculationCancellatonToken;
 
-        private OverlaySortTabControl<ProfileSortCriteria> sortingTabControl;
-        private readonly Bindable<ProfileSortCriteria> sorting = new Bindable<ProfileSortCriteria>(ProfileSortCriteria.Local);
+        protected OverlaySortTabControl<ProfileSortCriteria> sortingTabControl;
+        protected readonly Bindable<ProfileSortCriteria> sorting = new Bindable<ProfileSortCriteria>(ProfileSortCriteria.Local);
 
         [Resolved]
         private NotificationDisplay notificationDisplay { get; set; }
@@ -68,7 +68,7 @@ namespace PerformanceCalculatorGUI.Screens
 
         public override bool ShouldShowConfirmationDialogOnSwitch => false;
 
-        private const float username_container_height = 40;
+        protected const float username_container_height = 40;
 
         public ProfileScreen()
         {
@@ -347,7 +347,7 @@ namespace PerformanceCalculatorGUI.Screens
             return base.OnKeyDown(e);
         }
 
-        private void updateSorting(ProfileSortCriteria sortCriteria)
+        protected void updateSorting(ProfileSortCriteria sortCriteria)
         {
             if (!scores.Children.Any())
                 return;
