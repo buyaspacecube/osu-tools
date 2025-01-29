@@ -84,7 +84,7 @@ namespace PerformanceCalculatorGUI.Components
         private const float performance_background_shear = 0.45f;
 
         public readonly ExtendedScore Score;
-		
+
 		private int pfp_width;
 
         [Resolved]
@@ -98,7 +98,7 @@ namespace PerformanceCalculatorGUI.Components
         public ExtendedProfileScore(ExtendedScore score)
         {
             Score = score;
-			
+
 			pfp_width = (Score.User != null) ? height : 0;
 
             RelativeSizeAxes = Axes.X;
@@ -130,7 +130,8 @@ namespace PerformanceCalculatorGUI.Components
                         RelativeSizeAxes = Axes.Y,
                         Anchor = Anchor.CentreLeft,
                         Origin = Anchor.CentreLeft,
-                        Width = rank_difference_width + (2 * pfp_width),
+						Position = new Vector2(pfp_width, 0),
+                        Width = rank_difference_width,
                         Child = positionChangeText = new OsuSpriteText
                         {
                             Anchor = Anchor.Centre,
